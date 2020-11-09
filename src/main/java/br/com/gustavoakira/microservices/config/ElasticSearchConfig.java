@@ -1,0 +1,29 @@
+package br.com.gustavoakira.microservices.config;
+
+import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.RestClients;
+import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
+import org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+
+@Configuration
+@EnableElasticsearchRepositories("br.com.gustavoakira.microservices.repository")
+public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
+    @Override
+    public RestHighLevelClient elasticsearchClient() {
+        ClientConfiguration clientConfiguration = ClientConfiguration.builder()
+                .connectedToLocalhost()
+                .build();
+        return RestClients.create(clientConfiguration).rest();
+    }
+
+    @Bean
+    @Override
+    public ElasticsearchConverter elasticsearchEntityMapper(SimpleElasticsearchMappingContext elasticsearchMappingContext) {
+        return super.elasticsearchEntityMapper(elasticsearchMappingContext);
+    }
+}
